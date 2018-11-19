@@ -70,6 +70,34 @@ class Vortex(Flow):
         if self.r != 0:
             return -(self.gamma/(2*pi))*log(self.r)
         else:
+             return 0
+
+class DipolX(Flow):
+    def __init__(self, M):
+        self.M = M
+
+    def value(self):
+        pass #Value function not needed for newer implementation
+
+    def psi(self, x, y):
+        self.r = x**2+y**2
+        if self.r != 0:
+            return -(self.M/(2*pi))*(y/self.r)
+        else:
+            return 0
+
+class DipolY(Flow):
+    def __init__(self, M):
+        self.M = M
+
+    def value(self):
+        pass #Value function not needed for newer implementation
+
+    def psi(self, x, y):
+        self.r = x**2+y**2
+        if self.r != 0:
+            return (self.M/(2*pi))*(x/self.r)
+        else:
             return 0
 
 def makeMat(func, N, x_start, x_stop, y_start, y_stop):
@@ -101,34 +129,34 @@ def plotMat(Mat, N, n_stream, x_start, x_stop, y_start, y_stop):
     YES = zeros((N,N))
     streamVal = []
     constlen = (ma-mi)/n_stream
-    for i in range(0,n_stream):
+    for i in range(0,n_stream+1): #+1 needed for visualisation
         streamVal.append(mi+i*constlen)
-
-    #needed for visualization purposes
-    streamVal.append(ma+1)
-
+    
     for k in matlen:
         for l in matlen:
             for c in range(0,n_stream):
-                if (streamVal[c]<=abs(Mat[k][l])<=streamVal[c+1]):
+                if (streamVal[c]<=Mat[k][l]<=streamVal[c+1]):
                     YES[k][l] = c
                 else:
                     YES[k][l] = YES[k][l]
-
+    
     x_step = (x_stop-x_start)/(N*1.0) #multiplication by 1.0 to force float
     y_step = (y_stop-y_start)/(N*1.0)
     x_vec = zeros(N)
     y_vec = zeros(N)
-    for i in range(0,N):
-        x_vec[i] = x_start+i*x_step
-        y_vec[i] = y_start+i*y_step
-    
-    for k in matlen:
-        for l in matlen:
-            if 1:
-                pass
-                #plt.plot(x_vec[k],y_vec[k], marker='.', color='b')
-            else:
-                pass
+
+    #currently not needed
+    #for i in range(0,N):
+    #    x_vec[i] = x_start+i*x_step
+    #    y_vec[i] = y_start+i*y_step
+    #
+    #for k in matlen:
+    #    for l in matlen:
+    #        if 1:
+    #            pass
+    #            #plt.plot(x_vec[k],y_vec[k], marker='.', color='b')
+    #        else:
+    #            pass
+
     plt.matshow(YES)
     plt.show()

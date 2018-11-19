@@ -72,7 +72,7 @@ class Vortex(Flow):
         else:
             return 0
 
-def makeMat( func, N, x_start, x_stop, y_start, y_stop):
+def makeMat(func, N, x_start, x_stop, y_start, y_stop):
     #carefull: first matrix argument is y value!
     x_step = (x_stop-x_start)/(N*1.0) #multiplication by 1.0 to force float
     y_step = (y_stop-y_start)/(N*1.0)
@@ -103,14 +103,18 @@ def plotMat(Mat, N, n_stream, x_start, x_stop, y_start, y_stop):
     constlen = (ma-mi)/n_stream
     for i in range(0,n_stream):
         streamVal.append(mi+i*constlen)
+
+    #needed for visualization purposes
+    streamVal.append(ma+1)
+
     for k in matlen:
         for l in matlen:
             for c in range(0,n_stream):
-                if (0.9*streamVal[c])<=Mat[k][l]<=(1.1*streamVal[c]):
-                    YES[k][l] = 1
+                if (streamVal[c]<=abs(Mat[k][l])<=streamVal[c+1]):
+                    YES[k][l] = c
                 else:
-                    YES[k][l] = 0
-    print(YES)
+                    YES[k][l] = YES[k][l]
+
     x_step = (x_stop-x_start)/(N*1.0) #multiplication by 1.0 to force float
     y_step = (y_stop-y_start)/(N*1.0)
     x_vec = zeros(N)
@@ -118,22 +122,13 @@ def plotMat(Mat, N, n_stream, x_start, x_stop, y_start, y_stop):
     for i in range(0,N):
         x_vec[i] = x_start+i*x_step
         y_vec[i] = y_start+i*y_step
-
+    
     for k in matlen:
         for l in matlen:
-            if YES[k][l]==1:
-                plt.plot(x_vec[k],y_vec[k], marker='.', color='b')
+            if 1:
+                pass
+                #plt.plot(x_vec[k],y_vec[k], marker='.', color='b')
             else:
                 pass
-
-    plt.show()ker(marker)
-  File "/home/florian/.local/lib/python2.7/site-packages/matplotlib/markers.py", line 272, in set_marker
-    ' {0}'.format(marker))
-ValueError: Unrecognized marker style -
-florian@ubuntu:~/python/flow/visualizeFlow$ python matrixVisualize.py
-florian@ubuntu:~/python/flow/visualizeFlow$ python matrixVisualize.py
-[[1. 1. 1. ... 1. 1. 1.]
- [1. 1. 1. ... 1. 1. 1.]
- [1. 1. 1. ... 1. 1. 1.]
- ...
-
+    plt.matshow(YES)
+    plt.show()

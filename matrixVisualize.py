@@ -17,11 +17,12 @@ flow1 = SinkSource(20, 0, 0)
 flow2 = translationFlowX(2)
 flow3 = SinkSource(-20, -3, 0)
 
-#define Matrix 1
+#define Matrix
 Psi1 = makeMat(flow1, N, x_start, x_stop, y_start, y_stop)
 Psi2 = makeMat(flow2, N, x_start, x_stop, y_start, y_stop)
 Psi3 = makeMat(flow3, N, x_start, x_stop, y_start, y_stop)
 
+#Because of the linearity property of potential flow you can simply add the Matrix elements to get a combined flow
 Psi = Psi1+Psi2+Psi3
 
 plotMat(Psi,N, n_stream , x_start, x_stop, y_start, y_stop)

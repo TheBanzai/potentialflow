@@ -56,7 +56,7 @@ class SinkSource(Flow):
         return (x-self.x0)*tan((2*pi*c)/self.Q)+self.y0
 
     def psi(self, x, y):
-         return self.Q/(2*pi)*atan2(y+self.y0,x+self.x0)
+         return  self.Q/(2*pi)*atan2(y+self.y0,x+self.x0)
 
 class Vortex(Flow):
     def __init__(self, gamma):
@@ -98,7 +98,26 @@ class DipolY(Flow):
         if self.r != 0:
             return (self.M/(2*pi))*(x/self.r)
         else:
-            return 0
+            return 0 
+
+class SinkSourceDistLin(Flow):
+    def __init__(self,l, p, q, n):
+        self.l = l
+        self.p = p
+        self.q = q
+        self.n = n
+
+    def psi(self, x, y):
+        self.psiV = 0
+        Q_test = 0
+        self.val = [3,2,1,-1,-2,-3]
+        for i in self.val:
+            Q = self.val[i]
+            Q_test=Q_test+Q
+            print(i,Q_test)
+            x_step = x+i*(self.l*1.0)/self.n
+            self.psiV = self.psiV+(Q/(2*pi)*atan2(y,x_step))
+        return self.psiV
 
 def makeMat(func, N, x_start, x_stop, y_start, y_stop):
     #carefull: first matrix argument is y value!
@@ -160,3 +179,7 @@ def plotMat(Mat, N, n_stream, x_start, x_stop, y_start, y_stop):
 
     plt.matshow(YES)
     plt.show()
+
+def sourcestren(x_i, p, q):
+    return ((3*q*(2*p**2-2*p+1)/(p*(2*p**3-3*p+2)))*x_i**2)-((2*q*(4*p**3-3*p**2+1))/(p*(2*p**3-3*p+2)))*x_i+q
+

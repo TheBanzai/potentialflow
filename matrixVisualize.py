@@ -13,9 +13,9 @@ x_step = (x_stop-x_start)/(N*1.0) #multiplication by 1.0 to force float
 y_step = (y_stop-y_start)/(N*1.0)
 
 #define Flow
-flow1 = translationFlowX(2)
+flow1 = SinkSourceDistLin(2, 0.25, 2, 6)
 flow2 = Vortex(10)
-flow3 = SinkSource(-10, 0, 0)
+flow3 = translationFlowX(2)
 
 
 #define Matrix
@@ -24,7 +24,7 @@ Psi2 = makeMat(flow2, N, x_start, x_stop, y_start, y_stop)
 Psi3 = makeMat(flow3, N, x_start, x_stop, y_start, y_stop)
 
 #Because of the linearity property of potential flow you can simply add the Matrix elements to get a combined flow
-Psi = Psi1+Psi2
+Psi = Psi1+Psi3
 
 plotMat(Psi,N, n_stream , x_start, x_stop, y_start, y_stop)
 
